@@ -47,11 +47,14 @@ print(cd)
 
 #convert base 64 via header and strip out unecessary data
 for x, val in enumerate(cd):
-    cd[x][1] = cd[x][1].replace('%3D','=')
-    cd[x][1] = base64.b64decode(cd[x][1]).decode('utf-8')
-    start = cd[x][1].find('odol-atsec-')
-    end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
-    cd[x][1] = cd[x][1][start+11:end]
+    try:
+        cd[x][1] = cd[x][1].replace('%3D','=')
+        cd[x][1] = base64.b64decode(cd[x][1]).decode('utf-8')
+        start = cd[x][1].find('odol-atsec-')
+        end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
+        cd[x][1] = cd[x][1][start+11:end]
+    except:
+        pass
 '''
 #create mid tier column
 node_loc=cd[1].split('.')
@@ -92,8 +95,40 @@ temp_file.close()
 cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14]] for c in cd]
 
 
-cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent'])
+cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'cran'])
 #add in column labels
+
+#map comcast client ip addresses to crans
+#read in CRAN_Aggregates mapping file with 4 columns, cidr block, cran, integer start, integer end
+filename = "/Users/RDURFE200/Documents/cedexis/cran_aggs.txt"
+with open(filename) as temp_file:
+    reader = csv.reader(temp_file, delimiter='\t')
+    ca_list = list(reader)
+temp_file.close()
+low=0
+high=len(ca_list)
+mid = (high+low)//2 #integer division
+for z in enumerate(cd):
+    #convert client ip to integer based on whether it is IPv4 or IPv6
+    cd_num = int(ipaddress.ip_address(cd[z]))
+    #Need to build in Ipv6
+    while true: #loop until break
+        if (high-low)<=1:
+            #check low range
+            if cd_num >= ca[low][2] and cd_num <= ca[low][3]:
+                cd[z].append(ca[low][1])
+            elif cd_num >= ca[high][2] and cd_num <= ca[hig][3]:
+                cd[z].append(ca[high][1])
+            else:
+                cd[z].append('no match')
+            break
+        #check client ip against mid point and narrow bisection window
+        if cd_num >= ca[mid][2]:
+            low = mid
+            mid = (high+low)//2
+        else:
+            high = mid
+            mid = (high+low)//2
 
 
 #Write text file
@@ -103,6 +138,14 @@ with open(fileloc, "w") as temp_file:
     writer = csv.writer(temp_file)
     writer.writerows(cd)
 temp_file.close()
+
+
+
+
+
+
+
+
 '''
 0	timestamp
 1   timestamp rounded to 15 min interval*
@@ -124,36 +167,6 @@ temp_file.close()
 17	client ip stripped
 18	agent
 
-
-
-#map comcast client ip addresses to crans
-#read in CRAN_Aggregates mapping file
-low=0
-high=len(ca)
-mid = (high+low)//2 #integer division
-for z in enumerate(cd):
-    #convert client ip to integer based on whether it is IPv4 or IPv6
-    cd_num = int()
-    #Check if bisection window is down to two values
-    while true:
-        if (high-low)<=1:
-            #check low range
-            if cd_num
-            #check high range
-            #set "no match" if no match found
-            break
-        #check client ip against mid point and narrow bisection window
-        if cd_num >= ca[mid][2]:
-            low = mid
-            mid = mid = (high+low)//2
-        else:
-            high = mid
-            mid = mid = (high+low)//2
-
-#write tab delimited processed data file
-'''
-
-'''
 Original column list
 Column ID	Name
 0	timestamp
