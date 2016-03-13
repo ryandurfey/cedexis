@@ -28,13 +28,12 @@ as = AS number of network
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01067.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01068.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
     cd=list(reader)
 cd_file.close()
-print(cd)
 
 #read in data type for use in filename
 test_type_dict = {'0':'Response_Time', '1':'Availability', '14':'Throughput'}
@@ -89,10 +88,8 @@ with open(filename) as temp_file:
     asns_dict = dict(reader)
 temp_file.close()
 
-print (type(cd[0]))
 #convert coded columns to readable data
 cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14]] for c in cd]
-print (type(enumerate(cd)))
 
 #map comcast client ip addresses to crans
 #read in CRAN_Aggregates mapping file with 4 columns, cidr block, cran, integer start, integer end
@@ -138,6 +135,8 @@ with open(fileloc, "w") as temp_file:
     writer = csv.writer(temp_file, delimiter = '\t')
     writer.writerows(cd)
 temp_file.close()
+
+print(fileloc)
 
 
 
