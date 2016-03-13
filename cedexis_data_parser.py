@@ -39,11 +39,10 @@ print(cd)
 #read in data type for use in filename
 test_type_dict = {'0':'Response_Time', '1':'Availability', '14':'Throughput'}
 test_type=test_type_dict.get(cd[1][3]) #any row, fourth column
-print (test_type)
 
 #Remove columns 2, 3, 6, 8, 13, 15, 20& remove rows where client country in column 14 <> 223
 cd = [[c[0], c[1], c[4], c[5], c[7], c[9], c[10], c[11], c[12], c[14], c[16], c[17], c[18], c[19], c[21]] for c in cd if c[14]=='223']
-print(cd)
+
 
 #convert base 64 via header and strip out unecessary data
 for x, val in enumerate(cd):
@@ -66,70 +65,71 @@ city = node_loc[3]
 
 
 #read in country, state, city, and network mapping files
-filename = "/Users/RDURFE200/GitHub/cedexis/countries.txt"
+filename = "/Users/RDURFE200/Documents/cedexis/lookups/countries.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     countries_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/GitHub/cedexis/states.txt"
+filename = "/Users/RDURFE200/Documents/cedexis/lookups/states.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     states_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/GitHub/cedexis/cities.txt"
+filename = "/Users/RDURFE200/Documents/cedexis/lookups/cities.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     cities_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/GitHub/cedexis/asns.txt"
+filename = "/Users/RDURFE200/Documents/cedexis/lookups/asns.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     asns_dict = dict(reader)
 temp_file.close()
 
-
+print (type(cd[0]))
 #convert coded columns to readable data
 cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14]] for c in cd]
-
-
-cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'cran'])
-#add in column labels
+print (type(enumerate(cd)))
 
 #map comcast client ip addresses to crans
 #read in CRAN_Aggregates mapping file with 4 columns, cidr block, cran, integer start, integer end
-filename = "/Users/RDURFE200/Documents/cedexis/cran_aggs.txt"
+filename = "/Users/RDURFE200/Documents/cedexis/lookups/cran_aggs_processed.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
-    ca_list = list(reader)
+    ca = list(reader)
 temp_file.close()
-low=0
-high=len(ca_list)
+
+low = 0
+high = len(ca)
 mid = (high+low)//2 #integer division
-for z in enumerate(cd):
+z=0
+for z, val in enumerate(cd):
     #convert client ip to integer based on whether it is IPv4 or IPv6
-    cd_num = int(ipaddress.ip_address(cd[z]))
-    #Need to build in Ipv6
-    while true: #loop until break
+    print (z)
+    cd_num = int(ipaddress.ip_address(cd[z][14]))
+    while True: #loop until break
         if (high-low)<=1:
             #check low range
-            if cd_num >= ca[low][2] and cd_num <= ca[low][3]:
+            if cd_num >= int(ca[low][2]) and cd_num <= int(ca[low][3]):
                 cd[z].append(ca[low][1])
-            elif cd_num >= ca[high][2] and cd_num <= ca[hig][3]:
+            elif cd_num >= int(ca[high][2]) and cd_num <= int(ca[hig][3]):
                 cd[z].append(ca[high][1])
             else:
                 cd[z].append('no match')
             break
         #check client ip against mid point and narrow bisection window
-        if cd_num >= ca[mid][2]:
+        if cd_num >= int(ca[mid][2]):
             low = mid
             mid = (high+low)//2
         else:
             high = mid
             mid = (high+low)//2
 
+cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'cran'])
+#add in column labels
 
 #Write text file
 
