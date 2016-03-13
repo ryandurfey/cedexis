@@ -28,7 +28,7 @@ as = AS number of network
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01068.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01067.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -51,6 +51,7 @@ for x, val in enumerate(cd):
         start = cd[x][1].find('odol-atsec-')
         end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
         cd[x][1] = cd[x][1][start+11:end]
+        print(cd[x][1])
     except:
         pass
 '''
