@@ -2,8 +2,6 @@
 import ipaddress #convert IPs to integers
 import csv #read in csv files
 import base64 #convert via header
-import os
-from pathlib import Path
 import re
 import arrow # date/time library
 
@@ -48,20 +46,18 @@ for x, val in enumerate(cd):
     try:
         cd[x][1] = cd[x][1].replace('%3D','=')
         cd[x][1] = base64.b64decode(cd[x][1]).decode('utf-8')
-        start = cd[x][1].find('odol-atsec-')
-        end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
-        cd[x][1] = cd[x][1][start+11:end]
-        print(cd[x][1])
+        atsmid = re.search(r"(odol-atsmid.*?net)", cd[x][1]).group(1)
+        atsec = re.search(r"(odol-atsec.*?net)", cd[x][1]).group(1)
+        atsec_code = re.search(r"\[(.*?)\]", cd[x][1]).group(1)
+        atsec_st = atsec.split('.')[2]
+        atsec_city = atsec.split('.')[3]
+        #start = cd[x][1].find('odol-atsec-')
+        #end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
+        #cd[x][1] = cd[x][1][start+11:end]
+        cd[x][1] = atsec.split('.')[0]
+        cd[x].extend((atsmid.split('.')[0], atsec_st, atsec_city, atsec_code))
     except:
         pass
-'''
-#create mid tier column
-node_loc=cd[1].split('.')
-#create cache state column
-state = node_loc[2]
-#create cache city column
-city = node_loc[3]
-'''
 
 
 #read in country, state, city, and network mapping files
@@ -90,7 +86,7 @@ with open(filename) as temp_file:
 temp_file.close()
 
 #convert coded columns to readable data
-cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14]] for c in cd]
+cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14], c[15], c[16], c[17], c[18]] for c in cd]
 
 #map comcast client ip addresses to crans
 #read in CRAN_Aggregates mapping file with 4 columns, cidr block, cran, integer start, integer end
@@ -100,14 +96,14 @@ with open(filename) as temp_file:
     ca = list(reader)
 temp_file.close()
 
-low = 0
-high = len(ca)
-mid = (high+low)//2 #integer division
-z=0
+
 for z, val in enumerate(cd):
     #convert client ip to integer based on whether it is IPv4 or IPv6
     if cd[z][13]=='COMCAST-7922': # only search if client is on comcast
         cd_num = int(ipaddress.ip_address(cd[z][14]))
+        low = 0
+        high = len(ca)
+        mid = (high+low)//2 #integer division
         while True: #loop until break
             if (high-low)<=1:
                 #check low range
@@ -126,7 +122,7 @@ for z, val in enumerate(cd):
                 high = mid
                 mid = (high+low)//2
 
-cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'cran'])
+cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'client cran'])
 #add in column labels
 
 #Write text file
@@ -195,26 +191,5 @@ Column ID	Name
 Remove columns, 2, 3, 6, 8, 13, 15
 223 = country code us
 
-Ending column list
-Column ID	Name
-0	timestamp
-1   timestamp rounded to 15 min interval
-2	server hostname
-3   server state
-4   server city
-5   mid tier hostname
-6	response_code
-7	measurement
-8	resolver country
-9	resolver state
-10	resolver city
-11	resolver asn
-12	resolver ip
-13	client country
-14	client state
-15	client city
-16	client asn
-17	client ip stripped
-18	agent
 '''
 
