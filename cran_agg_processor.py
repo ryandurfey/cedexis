@@ -1,7 +1,7 @@
 
 import ipaddress #convert IPs to integers
 import csv #read in csv files
-
+from operator import itemgetter
 
 filename = "/Users/RDURFE200/Documents/cedexis/lookups/cran_aggs.txt"
 with open(filename) as temp_file:
@@ -28,6 +28,7 @@ for i, val in enumerate(ca):
     ca[i].append(block_start_int)
     ca[i].append(block_end_int)
 
+ca = sorted(ca, key=itemgetter(2))
 
 filename = "/Users/RDURFE200/Documents/cedexis/lookups/cran_aggs_processed.txt"
 with open(filename, "w") as temp_file:
