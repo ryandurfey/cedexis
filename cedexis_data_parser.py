@@ -27,7 +27,7 @@ as = AS number of network
 
 
 #import file with cedexis data and read into list of lists
-pathname = '/Users/RDURFE200/Documents/Cedexis/'
+pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
 data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01067.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
@@ -108,25 +108,25 @@ mid = (high+low)//2 #integer division
 z=0
 for z, val in enumerate(cd):
     #convert client ip to integer based on whether it is IPv4 or IPv6
-    print (z)
-    cd_num = int(ipaddress.ip_address(cd[z][14]))
-    while True: #loop until break
-        if (high-low)<=1:
-            #check low range
-            if cd_num >= int(ca[low][2]) and cd_num <= int(ca[low][3]):
-                cd[z].append(ca[low][1])
-            elif cd_num >= int(ca[high][2]) and cd_num <= int(ca[hig][3]):
-                cd[z].append(ca[high][1])
+    if cd[z][13]=='COMCAST-7922': # only search if client is on comcast
+        cd_num = int(ipaddress.ip_address(cd[z][14]))
+        while True: #loop until break
+            if (high-low)<=1:
+                #check low range
+                if cd_num >= int(ca[low][2]) and cd_num <= int(ca[low][3]):
+                    cd[z].append(ca[low][0])
+                elif cd_num >= int(ca[high][2]) and cd_num <= int(ca[high][3]):
+                    cd[z].append(ca[high][0])
+                else:
+                    cd[z].append('no match')
+                break
+            #check client ip against mid point and narrow bisection window
+            if cd_num >= int(ca[mid][2]):
+                low = mid
+                mid = (high+low)//2
             else:
-                cd[z].append('no match')
-            break
-        #check client ip against mid point and narrow bisection window
-        if cd_num >= int(ca[mid][2]):
-            low = mid
-            mid = (high+low)//2
-        else:
-            high = mid
-            mid = (high+low)//2
+                high = mid
+                mid = (high+low)//2
 
 cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'cran'])
 #add in column labels
@@ -135,7 +135,7 @@ cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'meas
 
 fileloc = pathname + data_filename[:-3] + test_type +'.txt'
 with open(fileloc, "w") as temp_file:
-    writer = csv.writer(temp_file)
+    writer = csv.writer(temp_file, delimiter = '\t')
     writer.writerows(cd)
 temp_file.close()
 
