@@ -5,18 +5,6 @@ import base64 #convert via header
 import re
 import arrow # date/time library
 
-
-#key concepts - enumerate over lists, list comprehensions where practical, bisection of mapping
-
-''' Data Defintions
-cd = cedexis data list of lists
-ca = cran aggregates list of lists
-co = countries file
-st = state
-ci = cities
-as = AS number of network
-'''
-
 #ask user for a date range with default of today only
 #loop through files for processing
 #search amazon s3 location for files
@@ -26,7 +14,7 @@ as = AS number of network
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01067.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01068.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -57,6 +45,8 @@ for x, val in enumerate(cd):
         cd[x][1] = atsec.split('.')[0]
         cd[x].extend((atsmid.split('.')[0], atsec_st, atsec_city, atsec_code))
     except:
+        cd[x][1] = 'no data'
+        cd[x].extend(('no data', 'no data', 'no data', 'no data'))
         pass
 
 
