@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="255eeb89-bd5f-43d0-b0f2-c77ce9df7968" name="Default" comment="rebuild">
+    <list default="true" id="255eeb89-bd5f-43d0-b0f2-c77ce9df7968" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aws_downloader.py" afterPath="$PROJECT_DIR$/aws_downloader.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cedexis_data_parser.py" afterPath="$PROJECT_DIR$/cedexis_data_parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cran_agg_processor.py" afterPath="$PROJECT_DIR$/cran_agg_processor.py" />
     </list>
     <ignored path="cedexis.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -417,7 +414,13 @@
       <option name="project" value="LOCAL" />
       <updated>1457966281386</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="rebuild">
+      <created>1457966657762</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1457966657762</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
