@@ -1,15 +1,9 @@
-#import
+#imports
 import ipaddress #convert IPs to integers
-import csv #read in csv files
-import base64 #convert via header
-import re
+import csv #read/write csv files
+import base64 #decode base64 via header
+import re #parsing via header text
 import arrow # date/time library
-
-#ask user for a date range with default of today only
-#loop through files for processing
-#search amazon s3 location for files
-#download files to hard drive
-#unzip
 
 
 #import file with cedexis data and read into list of lists
@@ -22,28 +16,25 @@ with open(fileloc) as cd_file:
 cd_file.close()
 
 
-#read in data type for use in filename
+#get the test type from the 4th column in the data for use in filename
 test_type_dict = {'0':'Response_Time', '1':'Availability', '14':'Throughput'}
-test_type=test_type_dict.get(cd[1][3]) #any row, fourth column
+test_type=test_type_dict.get(cd[1][3]) #any row, fourth column contains data
 
-#Remove columns 2, 3, 6, 8, 13, 15, 20& remove rows where client country in column 14 <> 223
+
+#Remove columns 2, 3, 6, 8, 13, 15, 20& remove rows where client country in column 14 <> 223 USA
 cd = [[c[0], c[1], c[4], c[5], c[7], c[9], c[10], c[11], c[12], c[14], c[16], c[17], c[18], c[19], c[21]] for c in cd if c[14]=='223']
 
 
 #convert base 64 via header and strip out unecessary data
 for x, val in enumerate(cd):
     try:
-        cd[x][1] = cd[x][1].replace('%3D','=')
+        cd[x][1] = cd[x][1].replace('%3D','=') #padding encoded improperly for base64
         cd[x][1] = base64.b64decode(cd[x][1]).decode('utf-8')
-        atsmid = re.search(r"(odol-atsmid.*?net)", cd[x][1]).group(1)
-        atsec = re.search(r"(odol-atsec.*?net)", cd[x][1]).group(1)
-        atsec_code = re.search(r"\[(.*?)\]", cd[x][1]).group(1)
-        atsec_st = atsec.split('.')[2]
-        atsec_city = atsec.split('.')[3]
-        #start = cd[x][1].find('odol-atsec-')
-        #end = cd[x][1].find('.comcast.net',70) #start at position 70 and look for this text
-        #cd[x][1] = cd[x][1][start+11:end]
-        cd[x][1] = atsec.split('.')[0]
+        atsmid = re.search(r"(odol-atsmid.*?net)", cd[x][1]).group(1) #get mid tier server
+        atsec = re.search(r"(odol-atsec.*?net)", cd[x][1]).group(1) #get edge tier server
+        atsec_code = re.search(r"\[(.*?)\]", cd[x][1]).group(1) #get via codes
+        atsec_st = atsec.split('.')[2] #get state from edge tier server
+        atsec_city = atsec.split('.')[3] #get city from edge tier server
         cd[x].extend((atsmid.split('.')[0], atsec_st, atsec_city, atsec_code))
     except:
         cd[x][1] = 'no data'
@@ -76,7 +67,7 @@ with open(filename) as temp_file:
     asns_dict = dict(reader)
 temp_file.close()
 
-#convert coded columns to readable data
+#convert coded columns to readable data, add a rounded time column, and also strip out cidr block from client IP
 cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14], c[15], c[16], c[17], c[18]] for c in cd]
 
 #map comcast client ip addresses to crans
@@ -86,17 +77,17 @@ with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     ca = list(reader)
 temp_file.close()
-
-
+#iterate over Cedexis data and where network = comcast, search for client IP in our cran to cidr block mapping file
 for z, val in enumerate(cd):
-    #convert client ip to integer based on whether it is IPv4 or IPv6
     if cd[z][13]=='COMCAST-7922': # only search if client is on comcast
+        #convert client ip to integer based on whether it is IPv4 or IPv6
         cd_num = int(ipaddress.ip_address(cd[z][14]))
+        #set parameters for bisection search of cran_aggs file
         low = 0
         high = len(ca)
         mid = (high+low)//2 #integer division
         while True: #loop until break
-            if (high-low)<=1:
+            if (high-low)<=1:  #once window is narrowed to two possibilities, check both
                 #check low range
                 if cd_num >= int(ca[low][2]) and cd_num <= int(ca[low][3]):
                     cd[z].append(ca[low][0])
@@ -105,7 +96,7 @@ for z, val in enumerate(cd):
                 else:
                     cd[z].append('no match')
                 break
-            #check client ip against mid point and narrow bisection window
+            #check client ip against mid point and narrow bisection search window
             if cd_num >= int(ca[mid][2]):
                 low = mid
                 mid = (high+low)//2
@@ -113,17 +104,17 @@ for z, val in enumerate(cd):
                 high = mid
                 mid = (high+low)//2
 
+
+#add in column labels into first line of list
 cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'client cran'])
-#add in column labels
+
 
 #Write text file
-
 fileloc = pathname + data_filename[:-3] + test_type +'.txt'
 with open(fileloc, "w") as temp_file:
     writer = csv.writer(temp_file, delimiter = '\t')
     writer.writerows(cd)
 temp_file.close()
-
 print(fileloc)
 
 
