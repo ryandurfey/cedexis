@@ -21,6 +21,7 @@ with open(fileloc) as cd_file:
     cd=list(reader)
 cd_file.close()
 
+
 #read in data type for use in filename
 test_type_dict = {'0':'Response_Time', '1':'Availability', '14':'Throughput'}
 test_type=test_type_dict.get(cd[1][3]) #any row, fourth column
