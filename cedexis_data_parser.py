@@ -14,7 +14,7 @@ import arrow # date/time library
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-08.27811.part-01068.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-13.27811.part-00870.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')

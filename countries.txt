@@ -1,0 +1,281 @@
+﻿0	Unknown
+1	Andorra
+2	United Arab Emirates
+3	Afghanistan
+4	Antigua and Barbuda
+5	Anguilla
+6	Albania
+7	Armenia
+8	Netherlands Antilles
+9	Angola
+11	Argentina
+12	American Samoa
+13	Austria
+14	Australia
+15	Aruba
+16	Azerbaijan
+17	Bosnia and Herzegovina
+18	Barbados
+19	Bangladesh
+20	Belgium
+21	Burkina Faso
+22	Bulgaria
+23	Bahrain
+24	Burundi
+25	Benin
+26	Bermuda
+27	Brunei Darussalam
+28	Bolivia, Plurinational State of
+29	Brazil
+30	Bahamas
+31	Bhutan
+33	Botswana
+34	Belarus
+35	Belize
+36	Canada
+38	Central African Republic
+39	Congo
+40	Switzerland
+41	Cook Islands
+42	Chile
+43	Cameroon
+44	China
+45	Colombia
+46	Costa Rica
+48	Cuba
+49	Cape Verde
+51	Cyprus
+52	Czech Republic
+53	Germany
+54	Djibouti
+55	Denmark
+56	Dominica
+57	Dominican Republic
+58	Algeria
+59	Ecuador
+60	Estonia
+61	Egypt
+63	Spain
+64	Ethiopia
+65	Finland
+66	Fiji
+67	Falkland Islands (Malvinas)
+68	Micronesia, Federated States of
+69	Faroe Islands
+70	France
+72	Gabon
+73	United Kingdom
+74	Grenada
+75	Georgia
+76	French Guiana
+77	Ghana
+78	Gibraltar
+79	Greenland
+80	Gambia
+81	Guinea
+82	Guadeloupe
+83	Equatorial Guinea
+84	Greece
+86	Guatemala
+87	Guam
+88	Guinea-Bissau
+89	Guyana
+90	Hong Kong
+92	Honduras
+93	Croatia
+94	Haiti
+95	Hungary
+96	Indonesia
+97	Ireland
+98	Israel
+99	India
+100	British Indian Ocean Territory
+101	Iraq
+102	Iran, Islamic Republic of
+103	Iceland
+104	Italy
+105	Jamaica
+106	Jordan
+107	Japan
+108	Kenya
+109	Kyrgyzstan
+110	Cambodia
+111	Kiribati
+112	Comoros
+113	Saint Kitts and Nevis
+115	Korea, Republic of
+116	Kuwait
+117	Cayman Islands
+118	Kazakhstan
+119	Lao Peoples Democratic Republic
+120	Lebanon
+121	Saint Lucia
+122	Liechtenstein
+123	Sri Lanka
+124	Liberia
+125	Lesotho
+126	Lithuania
+127	Luxembourg
+128	Latvia
+129	Libya
+130	Morocco
+131	Monaco
+132	Moldova, Republic of
+133	Madagascar
+134	Marshall Islands
+135	Macedonia, The Former Yugoslav Republic of
+136	Mali
+137	Myanmar
+138	Mongolia
+139	Macao
+140	Northern Mariana Islands
+141	Martinique
+142	Mauritania
+143	Montserrat
+144	Malta
+145	Mauritius
+146	Maldives
+147	Malawi
+148	Mexico
+149	Malaysia
+150	Mozambique
+151	Namibia
+152	New Caledonia
+153	Niger
+154	Norfolk Island
+155	Nigeria
+156	Nicaragua
+157	Netherlands
+158	Norway
+159	Nepal
+160	Nauru
+162	Niue
+163	New Zealand
+164	Oman
+165	Panama
+166	Peru
+167	French Polynesia
+168	Papua New Guinea
+169	Philippines
+170	Pakistan
+171	Poland
+172	Saint Pierre and Miquelon
+174	Puerto Rico
+175	Portugal
+176	Palau
+177	Paraguay
+178	Qatar
+179	RÌ(c)union
+180	Romania
+181	Russian Federation
+182	Rwanda
+183	Saudi Arabia
+184	Solomon Islands
+185	Seychelles
+186	Sudan
+187	Sweden
+188	Singapore
+189	Saint Helena, Ascension and Tristan Da Cunha
+190	Slovenia
+192	Slovakia
+193	Sierra Leone
+194	San Marino
+195	Senegal
+196	Somalia
+197	Suriname
+198	Sao Tome and Principe
+200	El Salvador
+201	Syrian Arab Republic
+202	Swaziland
+203	Turks and Caicos Islands
+204	Chad
+206	Togo
+207	Thailand
+208	Tajikistan
+210	Turkmenistan
+211	Tunisia
+212	Tonga
+214	Turkey
+215	Trinidad and Tobago
+216	Tuvalu
+217	Taiwan
+218	Tanzania, United Republic of
+219	Ukraine
+220	Uganda
+223	United States
+224	Uruguay
+225	Uzbekistan
+226	Holy See (Vatican City State)
+227	Saint Vincent and the Grenadines
+228	Venezuela, Bolivarian Republic of
+229	Virgin Islands, British
+230	Virgin Islands, U.S.
+231	Viet Nam
+232	Vanuatu
+233	Wallis and Futuna
+234	Samoa
+235	Yemen
+236	Mayotte
+238	South Africa
+239	Zambia
+241	Zimbabwe
+242	Europe Unknown
+243	Adelaide Island
+244	Admiralty Bay
+245	Antarctic Ice Sheet
+246	Antarctic Peninsula
+247	Atka-Bay
+248	Brunt Ice Shelf
+249	Dome A
+250	Dronning Maud Land
+251	East Ongul Island
+252	Geographical South Pole
+253	Greenwich Island
+254	King George Island
+255	Larsemann Hills in Prydz Bay
+256	Mac Robertson Land
+257	Macquarie Island
+258	Marie Byrd Land
+259	Princess Elizabeth Land
+260	Prydz Bay
+261	Queen Maud Land
+262	Schirmacher Region
+263	Sor Rondane Mountains
+264	Victoria Land
+265	Vincennes Bay
+266	Unknown
+267	Serbia
+268	Timor-Leste
+269	Jersey
+270	IEland Islands
+272	Cote d'Ivoire
+273	Eritrea
+274	Guernsey
+275	Isle of Man
+276	Montenegro
+277	Saint Martin (French Part)
+278	"Palestine, State of"
+279	"Congo, The Democratic Republic of the"
+280	Tokelau
+281	Asia Pacific Unknown
+282	"Korea, Democratic People's Republic of"
+283	South Sudan
+284	Anonymous Proxy
+285	Satellite Provider
+286	Antarctica
+287	Saint Bartholemy
+288	Bouvet Island
+289	Cocos (Keeling) Islands
+290	Bouvet Island
+292	Christmas Island
+293	Western Sahara
+294	South Georgia and the South Sandwich Islands
+295	Heard Island and Mcdonald Islands
+296	Pitcairn
+297	Svalbard and Jan Mayen
+298	French Southern Territories
+299	United States Minor Outlying Islands
+300	Sint Maarten (Dutch Part)
+301	Curacao
+302	"Bonaire, Sint Eustatius and Saba"
+303	Other Country
