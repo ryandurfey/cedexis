@@ -17,7 +17,7 @@ from user_agents import parse
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-14.27811.part-01074.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-17.27811.part-01024.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -78,14 +78,21 @@ temp_file.close()
 
 
 #Parse user agent string using this library https://pypi.python.org/pypi/user-agents
-#user_agent = parse(ua_string)
-#user_agent.device.model # returns 'iPhone'
-#user_agent.browser.family # returns 'Mobile Safari'
-#user_agent.os.family # returns 'iOS'
+for x, val in enumerate(cd):
+    try:
+        user_agent = parse(cd[x][14]) #parse user agent string in column 14
+        device = user_agent.device.model # returns 'iPhone'
+        browser = user_agent.browser.family # returns 'Mobile Safari'
+        os = user_agent.os.family # returns 'iOS'
+        cd[x].extend((device, os, browser))
+    except:
+        cd[x].extend(( 'no data', 'no data', 'no data'))
+        pass
 
 
 #convert coded columns to readable data, add a rounded time column, and also strip out cidr block from client IP
-cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14], c[15], c[16], c[17], c[18]] for c in cd]
+cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14], c[15], c[16], c[17], c[18], c[19], c[20], c[21]] for c in cd]
+
 
 #map comcast client ip addresses to crans
 #read in CRAN_Aggregates mapping file with 4 columns, cidr block, cran, integer start, integer end
@@ -123,7 +130,7 @@ for z, val in enumerate(cd):
 
 
 #add in column labels into first line of list
-cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'client cran'])
+cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'hardware', 'os', 'browser', 'client cran'])
 
 
 #Write text file
@@ -133,10 +140,6 @@ with open(fileloc, "w") as temp_file:
     writer.writerows(cd)
 temp_file.close()
 print(fileloc)
-
-
-
-
 
 
 
