@@ -1,14 +1,23 @@
+'''
+Purpose of this program is:
+1. Read in Cedexis data for Comcast CDN
+2. Eliminate any unneeded rows and columns to trim size of file
+3. Decode base64 encoded via header data and parse out values for edge server
+4. Decode all coded columns including network, country, state, and city
+5. Parse User Agent String to extract hardware OS and Browser
+'''
 #imports
 import ipaddress #convert IPs to integers
 import csv #read/write csv files
 import base64 #decode base64 via header
 import re #parsing via header text
 import arrow # date/time library
+from user_agents import parse
 
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-13.27811.part-00870.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-14.27811.part-01074.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -66,6 +75,14 @@ with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     asns_dict = dict(reader)
 temp_file.close()
+
+
+#Parse user agent string using this library https://pypi.python.org/pypi/user-agents
+#user_agent = parse(ua_string)
+#user_agent.device.model # returns 'iPhone'
+#user_agent.browser.family # returns 'Mobile Safari'
+#user_agent.os.family # returns 'iOS'
+
 
 #convert coded columns to readable data, add a rounded time column, and also strip out cidr block from client IP
 cd = [[c[0], arrow.get(c[0]).floor('hour').format('YYYY-MM-DD HH:mm:ss'), c[1], c[2], c[3], countries_dict.get(c[4]), states_dict.get(c[5]), cities_dict.get(c[6]), asns_dict.get(c[7]), c[8], countries_dict.get(c[9]), states_dict.get(c[10]), cities_dict.get(c[11]), asns_dict.get(c[12]), c[13][:-3], c[14], c[15], c[16], c[17], c[18]] for c in cd]
