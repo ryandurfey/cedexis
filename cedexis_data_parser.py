@@ -1,23 +1,25 @@
 '''
-Purpose of this program is:
+Purpose of this script is:
 1. Read in Cedexis data for Comcast CDN
 2. Eliminate any unneeded rows and columns to trim size of file
 3. Decode base64 encoded via header data and parse out values for edge server
 4. Decode all coded columns including network, country, state, and city
 5. Parse User Agent String to extract hardware OS and Browser
 '''
+
+
 #imports
 import ipaddress #convert IPs to integers
 import csv #read/write csv files
 import base64 #decode base64 via header
-import re #parsing via header text
-import arrow # date/time library
-from user_agents import parse
+import re #parsing via header text to extract server info
+import arrow # date/time library for parsing timestamps
+from user_agents import parse #user agent parsing library
 
 
 #import file with cedexis data and read into list of lists
 pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-17.27811.part-01024.kr.txt'
+data_filename = 'Comcast_CDN_Tune-2016-03-17.27811.part-01025.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -44,6 +46,7 @@ for x, val in enumerate(cd):
         atsec_code = re.search(r"\[(.*?)\]", cd[x][1]).group(1) #get via codes
         atsec_st = atsec.split('.')[2] #get state from edge tier server
         atsec_city = atsec.split('.')[3] #get city from edge tier server
+        cd[x][1] = atsec
         cd[x].extend((atsmid.split('.')[0], atsec_st, atsec_city, atsec_code))
     except:
         cd[x][1] = 'no data'
@@ -78,15 +81,16 @@ temp_file.close()
 
 
 #Parse user agent string using this library https://pypi.python.org/pypi/user-agents
-for x, val in enumerate(cd):
+for y, val in enumerate(cd):
     try:
-        user_agent = parse(cd[x][14]) #parse user agent string in column 14
-        device = user_agent.device.model # returns 'iPhone'
+        ua_string = cd[y][14]
+        user_agent = parse(ua_string) #parse user agent string in column 14
+        device = user_agent.device.family # returns 'iPhone'
         browser = user_agent.browser.family # returns 'Mobile Safari'
         os = user_agent.os.family # returns 'iOS'
-        cd[x].extend((device, os, browser))
+        cd[y].extend((device, os, browser))
     except:
-        cd[x].extend(( 'no data', 'no data', 'no data'))
+        cd[y].extend(( 'no device data', 'no os data', 'no browser data'))
         pass
 
 
@@ -130,7 +134,7 @@ for z, val in enumerate(cd):
 
 
 #add in column labels into first line of list
-cd.insert(0, ['timestamp', 'timestamp rounded', 'server', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'hardware', 'os', 'browser', 'client cran'])
+cd.insert(0, ['timestamp', 'timestamp rounded', 'atsec', 'response code', 'measurement', 'resolver country', 'resolver state', 'resolver city', 'resolver network', 'resolver ip', 'client country', 'client state', 'client city','client network', 'client ip stripped', 'agent', 'atsmid', 'atsec_state', 'atsec_city', 'atsec_code', 'hardware', 'os', 'browser', 'client cran'])
 
 
 #Write text file
@@ -142,30 +146,8 @@ temp_file.close()
 print(fileloc)
 
 
-
-
 '''
-0	timestamp
-1   timestamp rounded to 15 min interval*
-2	server hostname
-3   server state*
-4   server city*
-5   mid tier hostname
-6	response_code
-7	measurement
-8	resolver country
-9	resolver state
-10	resolver city
-11	resolver asn
-12	resolver ip
-13	client country
-14	client state
-15	client city
-16	client asn
-17	client ip stripped
-18	agent
-
-Original column list
+Original Column List from TXT file from Cedexis
 Column ID	Name
 0	timestamp
 1	unique_node_id
@@ -192,6 +174,36 @@ Column ID	Name
 
 Remove columns, 2, 3, 6, 8, 13, 15
 223 = country code us
+
+0	timestamp
+1   timestamp rounded to 15 min interval*
+2	server hostname
+3   server state*
+4   server city*
+5   mid tier hostname
+6	response_code
+7	measurement
+8	resolver country
+9	resolver state
+10	resolver city
+11	resolver asn
+12	resolver ip
+13	client country
+14	client state
+15	client city
+16	client asn
+17	client ip stripped
+18	agent
+edge server state
+edge server city
+edge server cache response code
+mid tier server
+user agent hardware
+user agent os
+user agent browser
+
+
+Original column list
 
 '''
 
