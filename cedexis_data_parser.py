@@ -18,8 +18,8 @@ from user_agents import parse #user agent parsing library
 
 
 #import file with cedexis data and read into list of lists
-pathname = '/Users/RDURFE200/Documents/Cedexis/data/'
-data_filename = 'Comcast_CDN_Tune-2016-03-17.27811.part-01025.kr.txt'
+pathname = '/Users/RDURFE200/Downloads/Cedexis/'
+data_filename = 'Comcast_CDN_Tune-2016-05-15.27811.part-00836.kr.txt'
 fileloc = pathname + data_filename
 with open(fileloc) as cd_file:
     reader = csv.reader(cd_file, delimiter='\t')
@@ -55,25 +55,25 @@ for x, val in enumerate(cd):
 
 
 #read in country, state, city, and network mapping files
-filename = "/Users/RDURFE200/Documents/cedexis/lookups/countries.txt"
+filename = "/Users/RDURFE200/Downloads/Cedexis/Lookups/countries.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     countries_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/Documents/cedexis/lookups/states.txt"
+filename = "/Users/RDURFE200/Downloads/Cedexis/Lookups/states.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     states_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/Documents/cedexis/lookups/cities.txt"
+filename = "/Users/RDURFE200/Downloads/Cedexis/Lookups/cities.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     cities_dict = dict(reader)
 temp_file.close()
 
-filename = "/Users/RDURFE200/Documents/cedexis/lookups/asns.txt"
+filename = "/Users/RDURFE200/Downloads/Cedexis/Lookups/asns.txt"
 with open(filename) as temp_file:
     reader = csv.reader(temp_file, delimiter='\t')
     asns_dict = dict(reader)
