@@ -12,9 +12,9 @@ SVG
 .. image:: https://cdn.rawgit.com/ryandurfey/cedexis/b4cfaa39/User_Roles.svg
 	:align: center
   
-PDF
+SVG Using HTML
 
+.. raw:: html
 
-.. image:: User_Roles.pdf
-	:align: center
+    <object data="User_Roles.svg" type="image/svg+xml"></object>
 
