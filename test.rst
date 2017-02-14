@@ -16,5 +16,5 @@ SVG Using HTML
 
 .. raw:: html
 
-    <object data="User_Roles.svg" type="image/svg+xml"></object>
+    <object data="User_Roles.svg" type="image/svg"></object>
 
