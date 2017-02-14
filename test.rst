@@ -1,4 +1,10 @@
 Test
-.. image:: myfile.png
 
-.. image:: myfile.svg
+PNG
+.. image:: User_Roles.png
+
+SVG
+.. image:: User_Roles.svg
+
+PDF
+.. image:: User_Roles.pdf
