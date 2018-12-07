@@ -9,7 +9,7 @@ PNG
 SVG
 
 
-.. image:: https://cdn.rawgit.com/ryandurfey/cedexis/b4cfaa39/User_Roles.svg
+.. image:: https://cdn.jsdelivr.net/gh/ryandurfey/cedexis@b4cfaa39/User_Roles.svg
 	:align: center
   
 SVG Using HTML
